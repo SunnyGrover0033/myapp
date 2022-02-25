@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="    viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.7/firebase-auth.js"></script>
+
+    <title>Login System</title>
+</head>
+<body>
+    <div class="formContainer">
+    <h1>Enter Credentials Here:</h1>
+    <input type="email" placeholder="email here" id="email"><br>
+    <input type="password" placeholder="password here" id="password"><br>
+    <button onclick="signUp()" id="signUp">SignUp</button>
+    <button onclick="googleSignin()" id="signIp">SignIn</button>
+    <button onclick="signOut()" id="signOut">SignOut</button>
+</div>
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyBkcLrQaixp8dhiMrNfrWdJ52nyadLS4cU",
+    authDomain: "login-demo-254f7.firebaseapp.com",
+    projectId: "login-demo-254f7",
+    storageBucket: "login-demo-254f7.appspot.com",
+    messagingSenderId: "228883805517",
+    appId: "1:228883805517:web:db9063121d6bf3a79ab304",
+    measurementId: "G-C8Q2HYKHY1"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  const auth =  firebase.auth();
+
+  //signup function
+  function signUp(){
+    var email = document.getElementById("email");
+    var password = document.getElementById("password");
+
+    const promise = auth.createUserWithEmailAndPassword(email.value,password.value);
+    //
+    promise.catch(e=>alert(e.message));
+    alert("SignUp Successfully");
+  }
+
+  //signIN function
+  function  signIn(){
+    var email = document.getElementById("email");
+    var password  = document.getElementById("password");
+    const promise = auth.signInWithEmailAndPassword(email.value,password.value);
+    promise.catch(e=>alert(e.message));
+    
+  }
+
+
+  //signOut
+
+  function signOut(){
+    auth.signOut();
+    alert("SignOut Successfully from System");
+  }
+
+//googleSignin
+  function googleSignin() {
+   var provider = new firebase.auth.GoogleAuthProvider();
+   
+   auth.signInWithPopup(provider).then(function(result) {
+      var token = result.credential.accessToken;
+      var user = result.user;
+    
+      console.log(token)
+      console.log(user)
+   }).catch(function(error) {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+    
+      console.log(error.code)
+      console.log(error.message)
+   });
+}
+
+  //active user to homepage
+  firebase.auth().onAuthStateChanged((user)=>{
+    if(user){
+      var email = user.email;
+      alert("Active user "+email);
+
+    }else{
+      alert("No Active user Found")
+    }
+  })
+</script>
+    
+</body>
+</html>
